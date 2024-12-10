@@ -1,13 +1,19 @@
 import {useRef} from "react";
 
-export default function Form() {
+// eslint-disable-next-line react/prop-types
+export default function Form({onAddTodo}) {
+    const inputRef = useRef();
 
-    const inputRef = useRef()
+    function handleSubmit(event) {
+        event.preventDefault();
 
-    function handleSubmit() {
-        const inputElement = inputRef.current
+        const inputElement = inputRef.current;
+        const todoValue = inputElement.value;
 
-        console.log(inputElement.value)
+        if (todoValue) {
+            onAddTodo(todoValue);
+            inputElement.value = "";
+        }
     }
 
     return (
@@ -21,5 +27,5 @@ export default function Form() {
             <br/>
             <button type="submit">Add Todo</button>
         </form>
-    )
+    );
 }
