@@ -1,12 +1,25 @@
 import './App.css';
 import Form from "./Form.jsx";
 import TodoList from "./TodoList.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+
+
+const LSKEY = "TodoApp"
 
 function App() {
-    const [tasks, setTasks] = useState([]); // État pour stocker les tâches
 
+    const [tasks, setTasks] = useState(getLocalData)
+
+    function getLocalData() {
+        const storedData = window.localStorage.getItem(LSKEY)
+        return storedData ? JSON.parse(storedData) : []
+    }
+
+    getLocalData()
     const addTask = (task) => {
+
+        console.log("Ajout de la tâche :", task);
+
         const newTask = {
             id: tasks.length + 1, // Générer un ID unique
             name: task,
@@ -23,6 +36,12 @@ function App() {
         );
     };
 
+    useEffect(() => {
+        window.localStorage.setItem(LSKEY, JSON.stringify(tasks))
+
+        console.log("Tâches mises à jour :", tasks);
+    }, [tasks]);
+
     return (
         <>
             <header>
@@ -37,5 +56,6 @@ function App() {
         </>
     );
 }
+
 
 export default App;
